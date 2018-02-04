@@ -73,10 +73,11 @@ public class CameraControler : MonoBehaviour {
 			if (Input.GetTouch(0).phase == TouchPhase.Began){
 
 				bIsMove = false;
-			}else if(Input.GetTouch(0).phase == TouchPhase.Canceled){
+			}else if(Input.GetTouch(0).phase == TouchPhase.Ended){
 
 				if (!bIsMove)
 				{
+					AppendText("Press----------------------------");
 					GameObject obj;
 					if (Press(Input.mousePosition , out obj))
 					{
@@ -90,7 +91,7 @@ public class CameraControler : MonoBehaviour {
 
 				float rx = -Input.GetAxis("Mouse X") * nMoveSpeed * Time.deltaTime;    
 				float ry = Input.GetAxis("Mouse Y") * nMoveSpeed * Time.deltaTime;    			
-				// Debug.Log(rx + " , " +  ry);
+				Debug.Log(rx + " , " +  ry);
 				if (!bIsMove)
 				{
 					if (Mathf.Abs(rx) > 1 || Mathf.Abs(ry) > 1)
