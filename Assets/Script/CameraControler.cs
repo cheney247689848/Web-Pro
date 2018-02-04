@@ -13,7 +13,7 @@ public class CameraControler : MonoBehaviour {
 	#if UNITY_EDITOR
 		private int nMoveSpeed = 200;
 	#else
-		private int nMoveSpeed = 150;
+		private int nMoveSpeed = 100;
 	#endif
 
 	// Use this for initialization
@@ -46,8 +46,8 @@ public class CameraControler : MonoBehaviour {
 			}
 		}else if(Input.GetMouseButton(0)){
 
-            float rx = -Input.GetAxis("Mouse X") * 200 * Time.deltaTime;    
-            float ry = Input.GetAxis("Mouse Y") * 200 * Time.deltaTime;    			
+            float rx = -Input.GetAxis("Mouse X") * nMoveSpeed * Time.deltaTime;    
+            float ry = Input.GetAxis("Mouse Y") * nMoveSpeed * Time.deltaTime;    			
 			// Debug.Log(rx + " , " +  ry);
 			if (!bIsMove)
 			{

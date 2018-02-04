@@ -22,11 +22,6 @@ public class PwContainer {
 
 	public Dictionary<GameObject , Pw> disPws = new Dictionary<GameObject, Pw>();
 
-	public void CreatWallPw(){
-
-
-	}
-
 	public void Creat(int nForward , int nRankMax , int nColMax , string strData ,Transform parent){
 
 		//解析str
