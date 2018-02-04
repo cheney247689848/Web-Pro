@@ -89,8 +89,8 @@ public class CameraControler : MonoBehaviour {
 				}
 			}else if(Input.GetTouch(0).phase == TouchPhase.Moved){
 
-				float rx = -Input.GetAxis("Mouse X") * nMoveSpeed * Time.deltaTime;    
-				float ry = Input.GetAxis("Mouse Y") * nMoveSpeed * Time.deltaTime;    			
+				float rx = -Input.GetAxis("Horizontal") * nMoveSpeed * Time.deltaTime;    
+				float ry = Input.GetAxis("Vertical") * nMoveSpeed * Time.deltaTime;    			
 				Debug.Log(rx + " , " +  ry);
 				if (!bIsMove)
 				{
