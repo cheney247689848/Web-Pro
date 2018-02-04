@@ -1,6 +1,0 @@
-5.3.6f1:2.2.0.0
-WebGL
-D:/Unity5.36/Editor/Data/Managed/UnityEngine.dll
-D:/Unity5.36/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll
-D:/Unity5.36/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll
-D:/Unity5.36/Editor/Data/Managed/UnityEditor.dll

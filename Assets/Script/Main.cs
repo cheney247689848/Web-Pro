@@ -106,6 +106,9 @@ public class Main : MonoBehaviour {
 		{
 			
 			Debug.Log(p.ToString());
+ 			object[] args = new object[]{p.nColumn};
+    		Application.ExternalCall("showdetail",args);
+
 		}else
 		{
 			Debug.LogError("Error cant not find the Obj");
