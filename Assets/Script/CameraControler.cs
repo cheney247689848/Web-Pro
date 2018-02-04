@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Text;
+using UnityEngine.UI;
 public delegate void DelegatePress(GameObject obj); //定义点击事件
 public class CameraControler : MonoBehaviour {
 
@@ -28,8 +30,19 @@ public class CameraControler : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+		if (Input.touchCount > 0)
+		{
+			AppendText("touchCount");
+		}
+
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+		{
+			AppendText("GetTouch");
+		}
+
 		if (Input.GetMouseButtonDown(0))
 		{
+			AppendText("GetMouseButtonDown");
 			bIsMove = false;
 		}else if(Input.GetMouseButtonUp(0)){
 			
@@ -82,5 +95,13 @@ public class CameraControler : MonoBehaviour {
 			return true;
 		}
 		return false;
+	}
+
+	private StringBuilder builder = new StringBuilder();
+	public void AppendText(string str){
+
+		builder.AppendLine(str);
+		Text t = GameObject.Find("Text").GetComponent<Text>();
+		t.text = builder.ToString();
 	}
 }
