@@ -29,20 +29,10 @@ public class CameraControler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-		if (Input.touchCount > 0)
-		{
-			AppendText("touchCount");
-		}
 
-		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-		{
-			AppendText("GetTouch");
-		}
-
+#if UNITY_EDITOR
 		if (Input.GetMouseButtonDown(0))
 		{
-			AppendText("GetMouseButtonDown");
 			bIsMove = false;
 		}else if(Input.GetMouseButtonUp(0)){
 			
@@ -75,6 +65,48 @@ public class CameraControler : MonoBehaviour {
 				vTarRotaion.x += ry;
 			}
 		}
+#else
+
+		if (Input.touchCount > 0)
+		{
+			AppendText(Input.GetTouch(0).phase.ToString());
+			if (Input.GetTouch(0).phase == TouchPhase.Began){
+
+				bIsMove = false;
+			}else if(Input.GetTouch(0).phase == TouchPhase.Canceled){
+
+				if (!bIsMove)
+				{
+					GameObject obj;
+					if (Press(Input.mousePosition , out obj))
+					{
+						if (delegatePress != null)
+						{
+							delegatePress(obj);
+						}
+					}
+				}
+			}else if(Input.GetTouch(0).phase == TouchPhase.Moved){
+
+				float rx = -Input.GetAxis("Mouse X") * nMoveSpeed * Time.deltaTime;    
+				float ry = Input.GetAxis("Mouse Y") * nMoveSpeed * Time.deltaTime;    			
+				// Debug.Log(rx + " , " +  ry);
+				if (!bIsMove)
+				{
+					if (Mathf.Abs(rx) > 1 || Mathf.Abs(ry) > 1)
+					{
+						bIsMove = true;
+					}
+				}
+				if(bIsMove)
+				{
+					vTarRotaion.y += rx;
+					vTarRotaion.x += ry;
+				}
+			}
+			
+		}
+#endif
 
 		vRotation = Vector3.MoveTowards(vRotation , vTarRotaion , 0.9f);
 		camera.transform.localRotation = Quaternion.Euler(vRotation.x,vRotation.y,0);
@@ -98,7 +130,15 @@ public class CameraControler : MonoBehaviour {
 	}
 
 	private StringBuilder builder = new StringBuilder();
+	private int nMaxLine;
 	public void AppendText(string str){
+
+		nMaxLine --;
+		if (nMaxLine <= 0)
+		{
+			nMaxLine = 20;
+			builder = new StringBuilder();
+		}
 
 		builder.AppendLine(str);
 		Text t = GameObject.Find("Text").GetComponent<Text>();
