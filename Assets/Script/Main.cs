@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Runtime.InteropServices;
 public class Main : MonoBehaviour {
 
 	private PwContainer pwContainer;
@@ -107,11 +107,15 @@ public class Main : MonoBehaviour {
 			
 			Debug.Log(p.ToString());
  			object[] args = new object[]{p.nColumn};
-    		Application.ExternalCall("showdetail",args);
+    		// Application.ExternalCall("showdetail",args);
+			showdetail(p.nColumn);
 
 		}else
 		{
 			Debug.LogError("Error cant not find the Obj");
 		}
 	}
+
+	[DllImport("__Internal")]
+    private static extern void showdetail(int arg);
 }
