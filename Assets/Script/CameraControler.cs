@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine.UI;
 public delegate void DelegatePress(GameObject obj); //定义点击事件
@@ -16,10 +17,13 @@ public class CameraControler : MonoBehaviour {
 	private bool bIsLook;
 
 	#if UNITY_EDITOR
-		private int nMoveSpeed = 250;
+		private int nMoveSpeed = 100;
 	#else
-		private int nMoveSpeed = 150;
+		private int nMoveSpeed = 50;
 	#endif
+
+	private int nInputType;
+	private int nInputEvent;
 
 	// Use this for initialization
 	void Start () {
@@ -29,16 +33,50 @@ public class CameraControler : MonoBehaviour {
 		vTarRotaion = vRotation;
 		bIsMove = false;
 		bIsLook = false;
+
+		nInputType = 0;
+		nInputEvent = -1;
+#if UNITY_EDITOR
+#else
+		if ("Desktop" == SystemInfo.deviceType.ToString())
+		{
+			nInputType = 1;
+		}
+#endif
+        Debug.Log(string.Format("nInputEvent = {0}", nInputEvent));
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-#if UNITY_EDITOR
-		if (Input.GetMouseButtonDown(0))
+		nInputEvent = -1;
+		if (0 == nInputType)
+		{
+			if (Input.GetMouseButtonDown(0)){
+				nInputEvent = 0;
+			}else if(Input.GetMouseButtonUp(0)){
+				nInputEvent = 1;
+			}else if(Input.GetMouseButton(0)){
+				nInputEvent = 2;
+			}
+		}else if(1 == nInputType){
+
+			if (Input.touchCount > 0)
+			{
+				if (Input.GetTouch(0).phase == TouchPhase.Began){
+					nInputEvent = 0;
+				}else if(Input.GetTouch(0).phase == TouchPhase.Ended){
+					nInputEvent = 1;					
+				}else if(Input.GetTouch(0).phase == TouchPhase.Moved){
+					nInputEvent = 2;
+				}
+			}
+		}
+
+		if (0 == nInputEvent)
 		{
 			bIsMove = false;
-		}else if(Input.GetMouseButtonUp(0)){
+		}else if(1 == nInputEvent){
 			
 			if (!bIsMove)
 			{
@@ -51,11 +89,11 @@ public class CameraControler : MonoBehaviour {
 					}
 				}
 			}
-		}else if(Input.GetMouseButton(0)){
+		}else if(2 == nInputEvent){
 
             float rx = -Input.GetAxis("Mouse X") * nMoveSpeed * Time.deltaTime;    
-            float ry = Input.GetAxis("Mouse Y") * nMoveSpeed * Time.deltaTime;    			
-			// Debug.Log(rx + " , " +  ry);
+            float ry = Input.GetAxis("Mouse Y") * nMoveSpeed * Time.deltaTime;
+			Debug.Log(rx + " , " +  ry);
 			if (!bIsMove)
 			{
 				if (Mathf.Abs(rx) > 0.2f || Mathf.Abs(ry) > 0.2f)
@@ -69,49 +107,6 @@ public class CameraControler : MonoBehaviour {
 				vTarRotaion.x += ry;
 			}
 		}
-#else
-
-		if (Input.touchCount > 0)
-		{
-			AppendText(Input.GetTouch(0).phase.ToString());
-			if (Input.GetTouch(0).phase == TouchPhase.Began){
-
-				bIsMove = false;
-			}else if(Input.GetTouch(0).phase == TouchPhase.Ended){
-
-				if (!bIsMove)
-				{
-					AppendText("Press----------------------------");
-					GameObject obj;
-					if (Press(Input.mousePosition , out obj))
-					{
-						if (delegatePress != null)
-						{
-							delegatePress(obj);
-						}
-					}
-				}
-			}else if(Input.GetTouch(0).phase == TouchPhase.Moved){
-
-				float rx = -Input.GetAxis("Horizontal") * nMoveSpeed * Time.deltaTime;    
-				float ry = Input.GetAxis("Vertical") * nMoveSpeed * Time.deltaTime;
-				AppendText(rx + " , " +  ry);
-				if (!bIsMove)
-				{
-					if (Mathf.Abs(rx) > 0.2f || Mathf.Abs(ry) > 0.2f)
-					{
-						bIsMove = true;
-					}
-				}
-				if(bIsMove)
-				{
-					vTarRotaion.y += rx;
-					vTarRotaion.x += ry;
-				}
-			}
-			
-		}
-#endif
 
 		vRotation = Vector3.MoveTowards(vRotation , vTarRotaion , 0.9f);
 		camera.transform.localRotation = Quaternion.Euler(vRotation.x,vRotation.y,0);

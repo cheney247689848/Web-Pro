@@ -10,6 +10,7 @@ public class Main : MonoBehaviour {
 	void Start () {
 		
 		Debug.Log(" --- Main Start---");
+        //Application.targetFrameRate = 60;
 		pwContainer = new PwContainer();
 		cameraControler = this.gameObject.GetComponent<CameraControler>();
 		/*
