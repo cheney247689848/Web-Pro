@@ -11,11 +11,14 @@ public class CameraControler : MonoBehaviour {
 	private Vector3 vRotation;
 	private Vector3 vTarRotaion;
 	private bool bIsMove;
+	private Vector3 vLookPosition;
+	private Vector3 vTarLookPosition;
+	private bool bIsLook;
 
 	#if UNITY_EDITOR
-		private int nMoveSpeed = 200;
+		private int nMoveSpeed = 250;
 	#else
-		private int nMoveSpeed = 100;
+		private int nMoveSpeed = 150;
 	#endif
 
 	// Use this for initialization
@@ -25,6 +28,7 @@ public class CameraControler : MonoBehaviour {
 		vRotation = new Vector3(0 , 180 , 0);
 		vTarRotaion = vRotation;
 		bIsMove = false;
+		bIsLook = false;
 	}
 	
 	// Update is called once per frame
@@ -54,7 +58,7 @@ public class CameraControler : MonoBehaviour {
 			// Debug.Log(rx + " , " +  ry);
 			if (!bIsMove)
 			{
-				if (Mathf.Abs(rx) > 1 || Mathf.Abs(ry) > 1)
+				if (Mathf.Abs(rx) > 0.2f || Mathf.Abs(ry) > 0.2f)
 				{
 					bIsMove = true;
 				}
@@ -90,11 +94,11 @@ public class CameraControler : MonoBehaviour {
 			}else if(Input.GetTouch(0).phase == TouchPhase.Moved){
 
 				float rx = -Input.GetAxis("Horizontal") * nMoveSpeed * Time.deltaTime;    
-				float ry = Input.GetAxis("Vertical") * nMoveSpeed * Time.deltaTime;    			
-				Debug.Log(rx + " , " +  ry);
+				float ry = Input.GetAxis("Vertical") * nMoveSpeed * Time.deltaTime;
+				AppendText(rx + " , " +  ry);
 				if (!bIsMove)
 				{
-					if (Mathf.Abs(rx) > 1 || Mathf.Abs(ry) > 1)
+					if (Mathf.Abs(rx) > 0.2f || Mathf.Abs(ry) > 0.2f)
 					{
 						bIsMove = true;
 					}
@@ -128,6 +132,12 @@ public class CameraControler : MonoBehaviour {
 			return true;
 		}
 		return false;
+	}
+
+	public void LookAt(Vector3 pos){
+
+		vLookPosition = camera.transform.forward;
+		vTarLookPosition = pos;
 	}
 
 	private StringBuilder builder = new StringBuilder();

@@ -12,7 +12,7 @@ public class Main : MonoBehaviour {
 		Debug.Log(" --- Main Start---");
 		pwContainer = new PwContainer();
 		cameraControler = this.gameObject.GetComponent<CameraControler>();
-
+		/*
 		//A
 		int nForward = 0;
 		int nRankMax = 9;
@@ -88,6 +88,7 @@ public class Main : MonoBehaviour {
 		+ "46,47,48|"
 		+ "46,47,48";
 		pwContainer.Creat(nForward ,nRankMax , nColMax , strData , GameObject.Find("pwContainerE").transform);
+		*/
 
 		//Event
 		cameraControler.delegatePress = new DelegatePress(ShowTip);
