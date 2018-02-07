@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+
+      <script>
+          function Reset()
+          {
+              var canvas = document.getElementById("#canvas");//获取#canvas
+              canvas.height=  document.documentElement.clientHeight;//获取body可见区域高度
+              canvas.width =  document.documentElement.clientWidth;//获取body可见区域高度
+              console.log(canvas.width);
+              console.log(canvas.height);
+          }
+      </script>
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | Web-Pro</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>  
+    <script src="Build/UnityLoader.js"></script>
+    <script>
+      var gameInstance = UnityLoader.instantiate("gameContainer", "Build/web-pro.json", {onProgress: UnityProgress});
+    </script>
+  </head>
+  <body onresize="Reset()" ,scroll= no, style="overflow:hidden">
+    <div class="webgl-content"style="width: 100%; height: 100%">
+      <!-- <div id="gameContainer" style="width: 1280px; height: 720px"></div> -->
+      <div id="gameContainer" style="width: 100%; height: 100%;margin:auto" ></div>
+      <div class="footer">
+        <div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
+        <div class="title">Web-Pro</div>
+      </div>
+    </div>
+  </body>
+</html>

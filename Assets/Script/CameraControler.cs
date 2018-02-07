@@ -15,13 +15,7 @@ public class CameraControler : MonoBehaviour {
 	private Vector3 vLookPosition;
 	private Vector3 vTarLookPosition;
 	private bool bIsLook;
-
-	#if UNITY_EDITOR
-		private int nMoveSpeed = 100;
-	#else
-		private int nMoveSpeed = 50;
-	#endif
-
+	private int nMoveSpeed = 200;
 	private int nInputType;
 	private int nInputEvent;
 
@@ -38,12 +32,13 @@ public class CameraControler : MonoBehaviour {
 		nInputEvent = -1;
 #if UNITY_EDITOR
 #else
-		if ("Desktop" == SystemInfo.deviceType.ToString())
+		if ("Desktop" != SystemInfo.deviceType.ToString())
 		{
 			nInputType = 1;
+			nMoveSpeed = 100;
 		}
 #endif
-        Debug.Log(string.Format("nInputEvent = {0}", nInputEvent));
+        Debug.Log(string.Format("nInputType = {0} deviceType = {1}", nInputType , SystemInfo.deviceType.ToString()));
 	}
 	
 	// Update is called once per frame
