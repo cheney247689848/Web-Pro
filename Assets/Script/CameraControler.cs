@@ -14,6 +14,10 @@ public class CameraControler : MonoBehaviour {
 	private bool bIsMove;
 	private Vector3 vLookPosition;
 	private Vector3 vTarLookPosition;
+	private Vector3 vVarietyPosition;
+	private Vector3 vStartPosition;
+	private Vector3 vLastPosition;
+	private Vector3 vSceneTouchPosition;
 	private bool bIsLook;
 	private int nMoveSpeed = 200;
 	private int nInputType;
@@ -27,6 +31,7 @@ public class CameraControler : MonoBehaviour {
 		vTarRotaion = vRotation;
 		bIsMove = false;
 		bIsLook = false;
+		vLookPosition = camera.transform.forward;
 
 		nInputType = 0;
 		nInputEvent = -1;
@@ -35,14 +40,54 @@ public class CameraControler : MonoBehaviour {
 		if ("Desktop" != SystemInfo.deviceType.ToString())
 		{
 			nInputType = 1;
-			nMoveSpeed = 100;
+			nMoveSpeed = 20;
 		}
 #endif
         Debug.Log(string.Format("nInputType = {0} deviceType = {1}", nInputType , SystemInfo.deviceType.ToString()));
+
+		LookAt(GameObject.Find("Ap").transform.position);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+
+		if (Input.GetKeyDown(KeyCode.Alpha1))
+		{
+			LookAt(GameObject.Find("Ap").transform.position);
+			
+			
+		}else if(Input.GetKeyDown(KeyCode.Alpha2)){
+
+			LookAt(GameObject.Find("Bp").transform.position);
+
+		}else if(Input.GetKeyDown(KeyCode.Alpha2)){
+
+
+		}else if(Input.GetKeyDown(KeyCode.Alpha2)){
+
+
+		}else if(Input.GetKeyDown(KeyCode.Alpha2)){
+
+
+		}
+
+		if (bIsLook)
+		{
+			if (Vector3.Distance(vLookPosition , vTarLookPosition) > 1)
+			{	
+				vLookPosition = Vector3.MoveTowards(vLookPosition , vTarLookPosition , 0.5f);
+				camera.transform.LookAt(vLookPosition);
+			}else{
+				
+				bIsLook = false;
+				vRotation = new Vector3(camera.transform.localRotation.eulerAngles.x, camera.transform.localRotation.eulerAngles.y , 0);
+				vTarRotaion = vRotation;
+				vTarLookPosition = vLookPosition;
+				vLastPosition = vLookPosition;
+			}
+			return;
+		}
 
 		nInputEvent = -1;
 		if (0 == nInputType)
@@ -71,6 +116,11 @@ public class CameraControler : MonoBehaviour {
 		if (0 == nInputEvent)
 		{
 			bIsMove = false;
+			vSceneTouchPosition = new Vector3(Input.mousePosition.x , Input.mousePosition.y , 10);
+			vStartPosition = camera.ScreenToWorldPoint(vSceneTouchPosition);
+			Debug.Log("start : " + vStartPosition);
+			// GameObject.Find("pLook").transform.position = p;Debug.Log(p);
+
 		}else if(1 == nInputEvent){
 			
 			if (!bIsMove)
@@ -86,25 +136,52 @@ public class CameraControler : MonoBehaviour {
 			}
 		}else if(2 == nInputEvent){
 
-            float rx = -Input.GetAxis("Mouse X") * nMoveSpeed * Time.deltaTime;    
-            float ry = Input.GetAxis("Mouse Y") * nMoveSpeed * Time.deltaTime;
-			Debug.Log(rx + " , " +  ry);
-			if (!bIsMove)
+			Vector3 vt = new Vector3(Input.mousePosition.x , Input.mousePosition.y , 10);
+			if (Vector3.Distance(vSceneTouchPosition , vt) > 0.5f)
 			{
-				if (Mathf.Abs(rx) > 0.2f || Mathf.Abs(ry) > 0.2f)
-				{
-					bIsMove = true;
-				}
+				vSceneTouchPosition = vt;
+				Vector3 v = camera.ScreenToWorldPoint(vSceneTouchPosition);
+				Debug.Log("move : " + v);
+				vVarietyPosition = vStartPosition - v;
+				vStartPosition = v;
+				Debug.Log(vVarietyPosition);
+				vTarLookPosition += vVarietyPosition;
+				Debug.Log(vLookPosition + " , " + vTarLookPosition);
 			}
-			if(bIsMove)
-			{
-				vTarRotaion.y += rx;
-				vTarRotaion.x += ry;
-			}
+
+			vLookPosition = Vector3.MoveTowards(vLookPosition , vTarLookPosition , 0.2f);
+			camera.transform.LookAt(vLookPosition);
+			
+			// if (Vector3.Distance(vLookPosition , vTarLookPosition) > 0.5f)
+			// {	
+			// 	vLookPosition = Vector3.MoveTowards(vLookPosition , vTarLookPosition , 0.5f);
+			// 	camera.transform.LookAt(vLookPosition);
+			// }
+
+            // float rx = -Input.GetAxis("Mouse X") * nMoveSpeed * Time.deltaTime;    
+            // float ry = Input.GetAxis("Mouse Y") * nMoveSpeed * Time.deltaTime;
+			// // Debug.Log(rx + " , " +  ry);
+			// if (!bIsMove)
+			// {
+			// 	if (Mathf.Abs(rx) > 0.2f || Mathf.Abs(ry) > 0.2f)
+			// 	{
+			// 		bIsMove = true;
+			// 	}
+			// }
+			// if(bIsMove)
+			// {
+			// 	vTarRotaion.y += rx;
+			// 	vTarRotaion.x += ry;
+
+			// 	vRotation = Vector3.MoveTowards(vRotation , vTarRotaion , 0.9f);
+			// 	camera.transform.localRotation = Quaternion.Euler(vRotation.x,vRotation.y,0);
+			// 	vLookPosition = camera.transform.forward;
+			// 	Debug.Log(vLookPosition);
+			// }
 		}
 
-		vRotation = Vector3.MoveTowards(vRotation , vTarRotaion , 0.9f);
-		camera.transform.localRotation = Quaternion.Euler(vRotation.x,vRotation.y,0);
+		// vRotation = Vector3.MoveTowards(vRotation , vTarRotaion , 0.9f);
+		// camera.transform.localRotation = Quaternion.Euler(vRotation.x,vRotation.y,0);
 	}
 
 	bool Press(Vector3 mousePosition , out GameObject obj){
@@ -126,7 +203,7 @@ public class CameraControler : MonoBehaviour {
 
 	public void LookAt(Vector3 pos){
 
-		vLookPosition = camera.transform.forward;
+		bIsLook = true;
 		vTarLookPosition = pos;
 	}
 
