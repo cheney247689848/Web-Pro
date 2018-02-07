@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Runtime.InteropServices;
 public class Main : MonoBehaviour {
@@ -13,7 +14,7 @@ public class Main : MonoBehaviour {
         //Application.targetFrameRate = 60;
 		pwContainer = new PwContainer();
 		cameraControler = this.gameObject.GetComponent<CameraControler>();
-		/*
+		
 		//A
 		int nForward = 0;
 		int nRankMax = 9;
@@ -28,7 +29,7 @@ public class Main : MonoBehaviour {
 		+ "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19|"
 		+ "4,5,6,7,8,9,x,11,12,13,14,15,16,17,x,19";
 		pwContainer.Creat(nForward ,nRankMax , nColMax , strData , GameObject.Find("pwContainerA").transform);
-
+		
 		//B
 		nForward = 1;
 		nRankMax = 9;
@@ -89,11 +90,53 @@ public class Main : MonoBehaviour {
 		+ "46,47,48|"
 		+ "46,47,48";
 		pwContainer.Creat(nForward ,nRankMax , nColMax , strData , GameObject.Find("pwContainerE").transform);
-		*/
+		
 
 		//Event
 		cameraControler.delegatePress = new DelegatePress(ShowTip);
+
+		//UI
+		Button btn_A = GameObject.Find ("Canvas/Btn_A").GetComponent<Button>();
+		btn_A.onClick.AddListener (OnClick_A);
+		Button btn_B = GameObject.Find ("Canvas/Btn_B").GetComponent<Button>();
+		btn_B.onClick.AddListener (OnClick_B);
+		Button btn_C = GameObject.Find ("Canvas/Btn_C").GetComponent<Button>();
+		btn_C.onClick.AddListener (OnClick_C);
+		Button btn_D = GameObject.Find ("Canvas/Btn_D").GetComponent<Button>();
+		btn_D.onClick.AddListener (OnClick_D);
+		Button btn_E = GameObject.Find ("Canvas/Btn_E").GetComponent<Button>();
+		btn_E.onClick.AddListener (OnClick_E);
 	}
+
+	 void OnClick_A ()
+     {
+        //  Debug.Log ("click!");
+		 cameraControler.LookAt(GameObject.Find("Ap").transform.position);
+     }
+
+	 void OnClick_B ()
+     {
+        //  Debug.Log ("click!");
+		 cameraControler.LookAt(GameObject.Find("Bp").transform.position);
+     }
+
+	 void OnClick_C ()
+     {
+        //  Debug.Log ("click!");
+		 cameraControler.LookAt(GameObject.Find("Cp").transform.position);
+     }
+
+	 void OnClick_D ()
+     {
+        //  Debug.Log ("click!");
+		 cameraControler.LookAt(GameObject.Find("Dp").transform.position);
+     }
+
+	 void OnClick_E ()
+     {
+        //  Debug.Log ("click!");
+		 cameraControler.LookAt(GameObject.Find("Ep").transform.position);
+     }
 	
 	// Update is called once per frame
 	void Update () {
@@ -110,7 +153,7 @@ public class Main : MonoBehaviour {
 			Debug.Log(p.ToString());
  			object[] args = new object[]{p.nColumn};
     		// Application.ExternalCall("showdetail",args);
-			showdetail(p.nColumn);
+			// showdetail(p.nColumn);
 
 		}else
 		{

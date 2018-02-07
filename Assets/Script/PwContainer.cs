@@ -56,8 +56,8 @@ public class PwContainer {
 						p.obj = GetPwObj();
 						p.obj.transform.SetParent(parent);
 						p.obj.transform.localRotation = Quaternion.Euler(0,0,0);
-						p.obj.transform.localScale = new Vector3(0.7f,1,0.2f);
-						p.obj.transform.localPosition = new Vector3(- 0.8f * i,  1.2f * l , 0);
+						p.obj.transform.localScale = new Vector3(11,16,1);
+						p.obj.transform.localPosition = new Vector3(13 * i + 13/2,  18 * l + 18/2 , 0);
 						disPws.Add(p.obj , p);
 					}
 				}
